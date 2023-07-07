@@ -6,6 +6,8 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST,
 } = process.env;
 
+// const populateDb = require('./controllers/populateDb')
+
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -15,7 +17,7 @@ const basename = path.basename(__filename);
 const modelDefiners = [];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-fs.readdirSync(path.join(__dirname, '/models'))
+fs.readdirSync(path.join(__dirname, '/models')) 
   .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
     modelDefiners.push(require(path.join(__dirname, '/models', file)));
@@ -30,15 +32,18 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Dog, Temperament } = sequelize.models;
+const { Dog } = sequelize.models;
+const { Temperament } = sequelize.models;
 
-populateDb(Dog, Temperament); // CREAR EL CONTROLLER
+// populateDb({Dog, Temperament}); // CREAR EL CONTROLLER
 
-Dog.belongsToMany(Temperament, {as: "temperaments", through: 'dog_temperament', timestamps: false });
-Temperament.belongsToMany(Dog, {as: "dogs", through: 'dog_temperament', timestamps: false });
+Dog.belongsToMany(Temperament, { through: 'dog_temperament' });
+Temperament.belongsToMany(Dog, { through: 'dog_temperament' });
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
+
+console.log(Temperament);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
