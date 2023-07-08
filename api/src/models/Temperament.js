@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     
-   sequelize.define('temperement', {
+   sequelize.define('temperament', {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -14,5 +14,5 @@ module.exports = (sequelize) => {
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4,
         },
-    }, {timestamps: false})
+    }, {timestamps: false});
 };

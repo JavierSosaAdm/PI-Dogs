@@ -8,13 +8,17 @@ const {
 
 // const populateDb = require('./controllers/populateDb')
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`, {
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`, 
+  {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });
 const basename = path.basename(__filename);
 
-const modelDefiners = [];
+const modelDefiners = [
+
+];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, '/models')) 
@@ -40,6 +44,7 @@ const { Dog, Temperament } = sequelize.models;
 Dog.belongsToMany(Temperament, { through: 'dog_temperament' });
 Temperament.belongsToMany(Dog, { through: 'dog_temperament' });
 
+Dog.sync();
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
