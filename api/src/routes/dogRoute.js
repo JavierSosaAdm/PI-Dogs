@@ -20,3 +20,5 @@ try {
     console.error("Error llenando base de datos con Dogs", error.message)
 }
 })
+
+// router.get()
