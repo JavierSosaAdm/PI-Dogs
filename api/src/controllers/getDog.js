@@ -39,6 +39,27 @@ const getDog = async () => {
     return result;
 }
 
+const getName = async (name) => {
+  const getApiName = await axios.get(`${URL}?api_key=${API_KEY}&name=${name}`);
+  const dogName = getApiName.data.map (dog => {
+    return {
+      id: dog.id,
+      name: dog.name,
+    }
+  });
+
+  const nombresDB = await Dog.findAll({
+    where: {
+      name: {
+        [Op.iLike]: `%${neme}%`
+      }
+    },
+    include: Temperament
+  });
+
+  
+
+}
 
 
-module.exports = { getDog }
+module.exports = { getDog, getName };
