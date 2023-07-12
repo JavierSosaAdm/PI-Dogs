@@ -1,6 +1,7 @@
 const axios = require('axios');
 const {op} = require('sequelize')
 const { Dog, Temperament } = require('../db');
+require('dotenv').config();
 const { URL, API_KEY } = process.env;
 
 const getTemp = async () => {
@@ -20,7 +21,13 @@ const getTemp = async () => {
             }
         }
     })
-    
+    const cleanAllTemps = new Set(allTemps.map(temp => temp.name));
+    const onlyNames = Array.from(cleanAllTemps);
+    const result = onlyNames.map(name => ({ name }));
+
+    const temps = await Temperament.bulkCreate(result);
+    return temps;
+
 }
 
-module.exports = getTemp;
+module.exports = { getTemp };

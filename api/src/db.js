@@ -6,7 +6,9 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST,
 } = process.env;
 
-// const populateDb = require('./controllers/populateDb')
+// const { getDog } = require('./controllers/getDog');
+// const { getTemp } = require('./controllers/getTemp');
+// const populateDb = require('./controllers/populateDb');
 
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`, 
@@ -38,6 +40,9 @@ const { Dog, Temperament } = sequelize.models;
 
 
 // populateDb({Dog, Temperament}); // CREAR EL CONTROLLER
+
+// getDog(Dog);
+// getTemp(Temperament)
 
 Dog.belongsToMany(Temperament, { through: 'dog_temperament' });
 Temperament.belongsToMany(Dog, { through: 'dog_temperament' });

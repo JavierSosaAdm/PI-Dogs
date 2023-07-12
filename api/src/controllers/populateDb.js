@@ -23,12 +23,17 @@ try {
 try {
     const response = await axios.get(`${URL}?api_key=${API_KEY}`);
     
-    const tempDog = response.data.results.map(temp => {
-        return {
-            name: temp.temperament
-        };
-    })
-    await Temperament.bulkCreate(tempDog);
+    const promesas = [];
+
+    for (const razaDog of response.data.results) {
+        const resDog = axios.get(razaDog.url);
+        promesas.push(resDog);
+    }
+
+    const results = await Promise.all(promesas);
+    for (const result of results) {
+        const parseDog = 0;
+    }
 
 } catch (error) {
     console.error("Error llenando base de datos con datos de Temperamento", error.message)

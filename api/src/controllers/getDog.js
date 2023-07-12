@@ -1,10 +1,11 @@
 const axios = require('axios');
-const {op} = require('sequelize')
+const {Op} = require('sequelize')
 const { Dog, Temperament } = require('../db');
+require('dotenv').config();
 const { URL, API_KEY } = process.env;
 
 const getDog = async () => {
-    let todosPerros = await axios.get(`${URL}?api_key=${API_KEY}`)
+    const todosPerros = await axios.get(`${URL}?api_key=${API_KEY}`)
     let infoAPI = todosPerros.data.map((dog) => {
       if (dog) {
         return {
@@ -41,7 +42,7 @@ const getDog = async () => {
 
 const getName = async (name) => {
   const getApiName = await axios.get(`${URL}?api_key=${API_KEY}&name=${name}`);
-  const dogName = getApiName.data.map (dog => {
+  let dogName = getApiName.data.map (dog => {
     return {
       id: dog.id,
       name: dog.name,
@@ -57,9 +58,21 @@ const getName = async (name) => {
     include: Temperament
   });
 
-  
+  const namesDB = nombresDB.map (dog => {
+    return {
+      id: dog.id,
+      name: dog.name,
+    }
+  });
 
-}
+  const allNames = [...namesDB, ...dogName]
+
+  if (!allNames.length) {
+    throw Error ('Nombre de raza no encontrado')
+  } else {
+    return allNames;
+  }
+};
 
 
 module.exports = { getDog, getName };

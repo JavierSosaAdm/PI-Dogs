@@ -15,15 +15,15 @@ const create = async (name, image, weight, height, life) => {
 
     const theTemps = await Temperament.findAll({
         where: {
-            name: temperaments
+            name: temperament
         },
         attributes: ['id'] 
     });
 
     const result = await created.setTemperaments(theTemps.map((temp) => temp.id));
-    console.log(result);
+    // console.log(result);
     if (result) return result;
     else throw new Error('Error al crear'); 
 };
 
-module.exports = create;
+module.exports = { create };
