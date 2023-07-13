@@ -2,7 +2,7 @@ const axios = require('axios');
 const {Op} = require('sequelize')
 const { Dog, Temperament } = require('../db');
 require('dotenv').config();
-const { URL, API_KEY } = process.env;
+const { URL, API_KEY, BUSCAR_RAZA } = process.env;
 
 const getDog = async () => {
     const todosPerros = await axios.get(`${URL}?api_key=${API_KEY}`)
@@ -14,7 +14,7 @@ const getDog = async () => {
           name: dog.name,
           teperament: dog.temperament,
           weight: dog.weight.metric,
-          life: dog.life.metric,
+          life: dog.life,
           height: dog.height.metric,
         }
       }
@@ -41,7 +41,7 @@ const getDog = async () => {
 }
 
 const getName = async (name) => {
-  const getApiName = await axios.get(`${URL}?api_key=${API_KEY}&name=${name}`);
+  const getApiName = await axios.get(`${BUSCAR_RAZA}${name}`);
   let dogName = getApiName.data.map (dog => {
     return {
       id: dog.id,
@@ -52,7 +52,7 @@ const getName = async (name) => {
   const nombresDB = await Dog.findAll({
     where: {
       name: {
-        [Op.iLike]: `%${neme}%`
+        [Op.iLike]: `%${name}%`
       }
     },
     include: Temperament
@@ -60,7 +60,7 @@ const getName = async (name) => {
 
   const namesDB = nombresDB.map (dog => {
     return {
-      id: dog.id,
+      id: dog.uuid,
       name: dog.name,
     }
   });

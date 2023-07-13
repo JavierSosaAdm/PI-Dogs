@@ -3,7 +3,7 @@ const {op} = require('sequelize')
 const { Dog, Temperament } = require('../db');
 
 
-const create = async (name, image, weight, height, life) => {
+const create = async (name, image, weight, height, life, temperament) => {
     let nameMin = name.toLowerCase();
     const created = await Dog.create({
         name: nameMin,
